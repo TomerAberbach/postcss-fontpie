@@ -1,0 +1,4 @@
+{
+  "extends": "tomer/tsconfig",
+  "include": ["**/*"]
+}
