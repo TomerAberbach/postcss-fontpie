@@ -16,6 +16,7 @@
 
 import 'tomer'
 import postcss from 'postcss'
+import type { LazyResult } from 'postcss'
 import postcssFontpie from '../src/index.js'
 
 test.each([
@@ -51,10 +52,17 @@ test.each([
     src: url(./test/fixtures/KantumruyPro-BoldItalic.ttf) format('ttf');
   }`,
 ])(`postcssFontpie`, async css => {
-  const processedCss = await runPostcss(css)
+  const result = await runPostcss(css)
 
-  expect(processedCss).toMatchSnapshot()
+  expect(result.warnings().map(String)).toBeEmpty()
+  expect(result.css).toMatchSnapshot()
 })
 
-const runPostcss = async (input: string): Promise<string> =>
-  (await postcss([postcssFontpie()]).process(input, { from: undefined })).css
+const runPostcss = async (input: string): Promise<LazyResult> =>
+  postcss([
+    postcssFontpie({
+      fontTypes: {
+        'Kantumruy Pro': `sans-serif`,
+      },
+    }),
+  ]).process(input, { from: undefined })

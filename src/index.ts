@@ -19,60 +19,40 @@ import fontpieCalc from 'fontpie-calc'
 import { parse } from 'postcss-values-parser'
 import type { ContainerBase, Func } from 'postcss-values-parser'
 
-const plugin: PluginCreator<Record<string, never>> = () => ({
-  postcssPlugin: `postcss-fontpie`,
-  AtRule: {
-    'font-face': (fontFaceRule, { result }) => {
-      const decls = getFontFaceDecls(fontFaceRule, result)
-      if (!decls) {
-        return
-      }
+const plugin: PluginCreator<Options> = options => {
+  if (!options) {
+    throw new Error(`Options are required`)
+  }
 
-      const values = parseFontFaceValues(decls, result)
-      if (!values) {
-        return
-      }
+  return {
+    postcssPlugin: `postcss-fontpie`,
+    AtRule: {
+      'font-face': (fontFaceRule, { result }) => {
+        const fontFaceDecls = getFontFaceDecls(fontFaceRule, result)
+        if (!fontFaceDecls) {
+          return
+        }
 
-      const { filename, family, style, weight } = values
-      const {
-        fallbackFont,
-        ascentOverride,
-        descentOverride,
-        lineGapOverride,
-        sizeAdjust,
-      } = fontpieCalc(filename, {
-        name: family,
-        style,
-        weight,
-      })
+        const fontFaceValues = parseFontFaceValues(
+          fontFaceDecls,
+          options,
+          result,
+        )
+        if (!fontFaceValues) {
+          return
+        }
 
-      fontFaceRule.before(
-        new AtRule({
-          name: `font-face`,
-          nodes: [
-            decls.family.clone({
-              value: `'${`${family} Fallback`.replaceAll(`'`, `\\'`)}'`,
-            }),
-            decls.style,
-            decls.weight,
-            decls.src.clone({ value: `local(${fallbackFont})` }),
-            new Declaration({ prop: `ascent-override`, value: ascentOverride }),
-            new Declaration({
-              prop: `descent-override`,
-              value: descentOverride,
-            }),
-            new Declaration({
-              prop: `line-gap-override`,
-              value: lineGapOverride,
-            }),
-            new Declaration({ prop: `size-adjust`, value: sizeAdjust }),
-          ].filter((decl): decl is Declaration => Boolean(decl)),
-          source: fontFaceRule.source,
-        }),
-      )
+        fontFaceRule.before(
+          generateFallbackFontFaceRule(
+            fontFaceRule,
+            fontFaceDecls,
+            fontFaceValues,
+          ),
+        )
+      },
     },
-  },
-})
+  }
+}
 plugin.postcss = true
 
 const getFontFaceDecls = (
@@ -92,7 +72,7 @@ const getFontFaceDecls = (
     }
 
     if (declsByProp.has(prop)) {
-      decl.warn(result, `Duplicate declration`)
+      decl.warn(result, `Duplicate declaration`)
       return null
     }
 
@@ -100,9 +80,14 @@ const getFontFaceDecls = (
   }
 
   const src = declsByProp.get(`src`)
+  if (src === undefined) {
+    fontFaceRule.warn(result, `Missing src`)
+    return null
+  }
+
   const family = declsByProp.get(`font-family`)
-  if (src === undefined || family === undefined) {
-    fontFaceRule.warn(result, `Missing src or font-family`)
+  if (family === undefined) {
+    fontFaceRule.warn(result, `Missing font-family`)
     return null
   }
 
@@ -123,47 +108,59 @@ const FONT_FACE_DECL_PROPS = new Set([
 
 const parseFontFaceValues = (
   fontFaceDecls: FontFaceDecls,
+  options: Options,
   result: Result,
 ): FontFaceValues | null => {
-  const { src, family, style, weight } = fontFaceDecls
+  const familyAndType = parseFontFamily(fontFaceDecls.family, options, result)
+  if (familyAndType === null) {
+    return null
+  }
 
-  const filename = parseFontFilename(src, result)
+  const filename = parseFontFilename(fontFaceDecls.src, options, result)
   if (filename === null) {
     return null
   }
 
   return {
     filename,
-    family: stringifyWithoutQuotes(parse(family.value)),
-    style: style?.value,
-    weight: weight?.value,
+    ...familyAndType,
+    style: fontFaceDecls.style?.value,
+    weight: fontFaceDecls.weight?.value,
   }
 }
 
-type FontFaceDecls = {
-  src: Declaration
-  family: Declaration
-  style?: Declaration
-  weight?: Declaration
-}
-
-type FontFaceValues = {
-  filename: string
-  family: string
-  style?: string
-  weight?: string
-}
-
-const parseFontFilename = (src: Declaration, result: Result): string | null => {
-  const urlNode = parse(src.value).nodes.find(
+const parseFontFilename = (
+  srcDecl: Declaration,
+  { srcUrlToFilename = filename => filename }: Options,
+  result: Result,
+): string | null => {
+  const urlNode = parse(srcDecl.value).nodes.find(
     (node): node is Func => node.type === `func` && node.name === `url`,
   )
   if (!urlNode) {
-    src.warn(result, `No url`)
+    srcDecl.warn(result, `No url`)
     return null
   }
 
-  return stringifyWithoutQuotes(urlNode)
+  return srcUrlToFilename(stringifyWithoutQuotes(urlNode))
+}
+
+const parseFontFamily = (
+  familyDecl: Declaration,
+  { fontTypes }: Options,
+  result: Result,
+): Pick<FontFaceValues, `family` | `type`> | null => {
+  const family = stringifyWithoutQuotes(parse(familyDecl.value))
+  if (isFallbackFontFamily(family)) {
+    return null
+  }
+
+  if (!Object.prototype.hasOwnProperty.call(fontTypes, family)) {
+    familyDecl.warn(result, `Family not in font type mapping: ${family}`)
+    return null
+  }
+
+  return { family, type: fontTypes[family]! }
 }
 
 const stringifyWithoutQuotes = (root: ContainerBase): string => {
@@ -184,5 +181,91 @@ const stringifyWithoutQuotes = (root: ContainerBase): string => {
   }
   return string
 }
+
+const generateFallbackFontFaceRule = (
+  fontFaceRule: AtRule,
+  fontFaceDecls: FontFaceDecls,
+  { filename, family, type, style, weight }: FontFaceValues,
+): AtRule => {
+  const {
+    fallbackFont,
+    ascentOverride,
+    descentOverride,
+    lineGapOverride,
+    sizeAdjust,
+  } = fontpieCalc(filename, {
+    name: family,
+    fallback: type,
+    style,
+    weight,
+  })
+
+  return new AtRule({
+    name: `font-face`,
+    nodes: [
+      fontFaceDecls.family.clone({
+        value: `'${family.replaceAll(`'`, `\\'`) + FALLBACK_SUFFIX}'`,
+      }),
+      fontFaceDecls.style,
+      fontFaceDecls.weight,
+      fontFaceDecls.src.clone({ value: `local(${fallbackFont})` }),
+      new Declaration({
+        prop: `ascent-override`,
+        value: ascentOverride,
+      }),
+      new Declaration({
+        prop: `descent-override`,
+        value: descentOverride,
+      }),
+      new Declaration({
+        prop: `line-gap-override`,
+        value: lineGapOverride,
+      }),
+      new Declaration({ prop: `size-adjust`, value: sizeAdjust }),
+    ].filter((decl): decl is Declaration => Boolean(decl)),
+    source: fontFaceRule.source,
+  })
+}
+
+const isFallbackFontFamily = (family: string): boolean =>
+  family.endsWith(FALLBACK_SUFFIX)
+
+const FALLBACK_SUFFIX = ` Fallback`
+
+type FontFaceDecls = {
+  src: Declaration
+  family: Declaration
+  style?: Declaration
+  weight?: Declaration
+}
+
+type FontFaceValues = {
+  filename: string
+  family: string
+  type: FontType
+  style?: string
+  weight?: string
+}
+
+export type Options = {
+  /**
+   * A mapping from `font-family` to its font type (`sans-serif`, `serif`, or
+   * `mono`).
+   *
+   * A `@font-face` rule is only processed if its `font-family` is in this
+   * mapping.
+   */
+  fontTypes: Record<string, FontType>
+
+  /**
+   * An optional function that transforms a `@font-face` rule's `src` `url`
+   * value to a file system path to the font file.
+   *
+   * The path is resolved relative to `process.cwd()`.
+   */
+  srcUrlToFilename?: (url: string) => string
+}
+
+export type FontType = `sans-serif` | `serif` | `mono`
 
 export default plugin
