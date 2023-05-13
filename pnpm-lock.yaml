@@ -21,6 +21,9 @@ dependencies:
   postcss-values-parser:
     specifier: ^6.0.2
     version: 6.0.2(postcss@8.4.23)
+  slashes:
+    specifier: ^3.0.12
+    version: 3.0.12
 
 devDependencies:
   '@types/jest':
@@ -9318,6 +9321,13 @@ packages:
       }
     engines: { node: '>=14.16' }
     dev: true
+
+  /slashes@3.0.12:
+    resolution:
+      {
+        integrity: sha512-Q9VME8WyGkc7pJf6QEkj3wE+2CnvZMI+XJhwdTPR8Z/kWQRXi7boAWLDibRPyHRTUTPx5FaU7MsyrjI3yLB4HA==,
+      }
+    dev: false
 
   /slice-ansi@3.0.0:
     resolution:

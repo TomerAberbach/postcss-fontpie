@@ -41,6 +41,11 @@
     "prepublishOnly": "tomer build"
   },
   "prettier": "tomer/prettier",
+  "dependencies": {
+    "fontpie-calc": "^0.2.0",
+    "postcss-values-parser": "^6.0.2",
+    "slashes": "^3.0.12"
+  },
   "peerDependencies": {
     "postcss": "^8.0.0"
   },
@@ -51,9 +56,5 @@
     "postcss": "^8.4.23",
     "tomer": "^2.0.1",
     "typescript": "^5.0.4"
-  },
-  "dependencies": {
-    "fontpie-calc": "^0.2.0",
-    "postcss-values-parser": "^6.0.2"
   }
 }

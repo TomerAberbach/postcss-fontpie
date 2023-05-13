@@ -16,8 +16,9 @@
 
 import { AtRule, Declaration, type PluginCreator, type Result } from 'postcss'
 import fontpieCalc from 'fontpie-calc'
-import { parse } from 'postcss-values-parser'
-import type { ContainerBase, Func } from 'postcss-values-parser'
+import parser from 'postcss-values-parser'
+import type { Func, Node } from 'postcss-values-parser'
+import { fromCssString, toCssString } from './css-string.js'
 
 const plugin: PluginCreator<Options> = options => {
   if (!options) {
@@ -134,15 +135,17 @@ const parseFontFilename = (
   { srcUrlToFilename = filename => filename }: Options,
   result: Result,
 ): string | null => {
-  const urlNode = parse(srcDecl.value).nodes.find(
-    (node): node is Func => node.type === `func` && node.name === `url`,
-  )
+  const urlNode = parser
+    .parse(srcDecl.value)
+    .nodes.find(
+      (node): node is Func => node.type === `func` && node.name === `url`,
+    )
   if (!urlNode) {
     srcDecl.warn(result, `No url`)
     return null
   }
 
-  return srcUrlToFilename(stringifyWithoutQuotes(urlNode))
+  return srcUrlToFilename(urlNode.nodes.map(stringifyWithoutQuotes).join(``))
 }
 
 const parseFontFamily = (
@@ -150,7 +153,7 @@ const parseFontFamily = (
   { fontTypes }: Options,
   result: Result,
 ): Pick<FontFaceValues, `family` | `type`> | null => {
-  const family = stringifyWithoutQuotes(parse(familyDecl.value))
+  const family = stringifyWithoutQuotes(parser.parse(familyDecl.value))
   if (isFallbackFontFamily(family)) {
     return null
   }
@@ -163,22 +166,15 @@ const parseFontFamily = (
   return { family, type: fontTypes[family]! }
 }
 
-const stringifyWithoutQuotes = (root: ContainerBase): string => {
-  let string = ``
-  for (const node of root.nodes) {
-    switch (node.type) {
-      case `operator`:
-      case `punctuation`:
-      case `word`:
-        string += node.value
-        break
-      case `quoted`:
-        string += node.contents
-        break
-      default:
-        continue
-    }
+const stringifyWithoutQuotes = (node: Node): string => {
+  const string = parser.nodeToString(node)
+
+  if (
+    [`'`, `"`].some(quote => string.startsWith(quote) && string.endsWith(quote))
+  ) {
+    return fromCssString(string)
   }
+
   return string
 }
 
@@ -204,7 +200,7 @@ const generateFallbackFontFaceRule = (
     name: `font-face`,
     nodes: [
       fontFaceDecls.family.clone({
-        value: `'${family.replaceAll(`'`, `\\'`) + FALLBACK_SUFFIX}'`,
+        value: toCssString(family + FALLBACK_SUFFIX),
       }),
       fontFaceDecls.style,
       fontFaceDecls.weight,
@@ -255,7 +251,7 @@ export type Options = {
    * A `@font-face` rule is only processed if its `font-family` is in this
    * mapping.
    */
-  fontTypes: Record<string, FontType>
+  readonly fontTypes: Readonly<Record<string, FontType>>
 
   /**
    * An optional function that transforms a `@font-face` rule's `src` `url`
@@ -263,7 +259,7 @@ export type Options = {
    *
    * The path is resolved relative to `process.cwd()`.
    */
-  srcUrlToFilename?: (url: string) => string
+  readonly srcUrlToFilename?: (url: string) => string
 }
 
 export type FontType = `sans-serif` | `serif` | `mono`

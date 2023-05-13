@@ -18,51 +18,64 @@ import 'tomer'
 import postcss from 'postcss'
 import type { LazyResult } from 'postcss'
 import postcssFontpie from '../src/index.js'
+import type { Options } from '../src/index.js'
+
+test(`postcssFontpie throws for no options`, () => {
+  expect(postcssFontpie).toThrow()
+})
+
+const fontTypes: Options[`fontTypes`] = {
+  'Noto Serif': `serif`,
+  Roboto: `sans-serif`,
+  'Ubuntu Mono': `mono`,
+}
 
 test.each([
-  `@font-face {
-    font-family: 'Kantumruy Pro';
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-    src: url(./test/fixtures/KantumruyPro-Medium.ttf);
-  }
+  {
+    name: `default srcUrlToFilename`,
+    css: `
+      @font-face {
+        font-family: 'Noto Serif';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf);
+      }
 
-  @font-face {
-    font-family: 'Kantumruy Pro';
-    font-weight: 600;
-    font-style: normal;
-    font-display: swap;
-    src: url(./test/fixtures/KantumruyPro-SemiBold.woff2) format('woff2');
-  }
+      @font-face {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./test/fonts/roboto/Roboto-Regular.ttf);
+      }
 
-  @font-face {
-    font-family: 'Kantumruy Pro';
-    font-weight: 600;
-    font-style: italic;
-    font-display: swap;
-    src: url(./test/fixtures/KantumruyPro-SemiBoldItalic.woff) format('woff');
-  }
+      @font-face {
+        font-family: Ubuntu Mono;
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+        src: url(./test/fonts/ubuntu-mono/UbuntuMono-Bold.ttf);
+      }
+    `,
+    options: { fontTypes },
+    expectedWarnings: [],
+  },
+])(`postcssFontpie: $name`, async ({ css, options, expectedWarnings }) => {
+  const result = await runPostcss(css, options)
 
-  @font-face {
-    font-family: 'Kantumruy Pro';
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
-    src: url(./test/fixtures/KantumruyPro-BoldItalic.ttf) format('ttf');
-  }`,
-])(`postcssFontpie`, async css => {
-  const result = await runPostcss(css)
-
-  expect(result.warnings().map(String)).toBeEmpty()
+  const warnings = result
+    .warnings()
+    .map(String)
+    .map(warning =>
+      warning.replace(/^postcss-fontpie: <css input>:\d+:\d+: /u, ``),
+    )
+  expect(warnings).toStrictEqual(expectedWarnings)
   expect(result.css).toMatchSnapshot()
 })
 
-const runPostcss = async (input: string): Promise<LazyResult> =>
-  postcss([
-    postcssFontpie({
-      fontTypes: {
-        'Kantumruy Pro': `sans-serif`,
-      },
-    }),
-  ]).process(input, { from: undefined })
+const runPostcss = async (
+  input: string,
+  options: Options,
+): Promise<LazyResult> =>
+  postcss([postcssFontpie(options)]).process(input, { from: undefined })
