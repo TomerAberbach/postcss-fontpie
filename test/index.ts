@@ -25,6 +25,18 @@ test(`postcssFontpie throws for no options`, () => {
   expect(postcssFontpie).toThrow()
 })
 
+test(`postcssFontpie throws for fontpie error`, async () => {
+  await expect(
+    runPostcss(
+      `@font-face {
+        font-family: 'Noto Serif';
+        src: url(i-do-not-exist.ttf) format('ttf');
+      }`,
+      { fontTypes },
+    ),
+  ).toReject()
+})
+
 const fontTypes: Options[`fontTypes`] = {
   'Noto Serif': `serif`,
   Roboto: `sans-serif`,
