@@ -151,7 +151,9 @@ await fs.writeFile(outputPath, outputCss)
 }
 ```
 
-The plugin can also be used in `postcss.config.js`.
+The plugin can also be used in `postcss.config.js`. See
+[`fontpie`](https://github.com/pixel-point/fontpie) for font format support and
+browser compatibility.
 
 ## Contributing
 
