@@ -7,7 +7,14 @@
     "url": "https://tomeraberba.ch"
   },
   "description": "A postcss plugin optimizing font loading layout shifts using fontpie!",
-  "keywords": [],
+  "keywords": [
+    "css",
+    "postcss",
+    "postcss-plugin",
+    "fontpie",
+    "fonts",
+    "cls"
+  ],
   "homepage": "https://github.com/TomerAberbach/postcss-fontpie",
   "repository": "TomerAberbach/postcss-fontpie",
   "bugs": {
