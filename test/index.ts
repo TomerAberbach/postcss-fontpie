@@ -15,6 +15,7 @@
  */
 
 import 'tomer'
+import { join } from 'path'
 import postcss from 'postcss'
 import type { LazyResult } from 'postcss'
 import postcssFontpie from '../src/index.js'
@@ -39,7 +40,7 @@ test.each([
         font-weight: 400;
         font-style: italic;
         font-display: swap;
-        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf);
+        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
       }
 
       @font-face {
@@ -47,7 +48,7 @@ test.each([
         font-weight: 400;
         font-style: normal;
         font-display: swap;
-        src: url(./test/fonts/roboto/Roboto-Regular.ttf);
+        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
       }
 
       @font-face {
@@ -55,11 +56,116 @@ test.each([
         font-weight: 700;
         font-style: normal;
         font-display: swap;
-        src: url(./test/fonts/ubuntu-mono/UbuntuMono-Bold.ttf);
+        src: url(./test/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
       }
     `,
     options: { fontTypes },
     expectedWarnings: [],
+  },
+  {
+    name: `custom srcUrlToFilename`,
+    css: `
+      @font-face {
+        font-family: 'Noto Serif';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(/roboto/Roboto-Regular.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: Ubuntu Mono;
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+        src: url(/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
+      }
+    `,
+    options: {
+      fontTypes,
+      srcUrlToFilename: (url: string) => join(`./test/fonts`, url),
+    },
+    expectedWarnings: [],
+  },
+  {
+    name: `warnings`,
+    css: `
+      @font-face {
+        font-family: 'Noto Serif';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: Roboto;
+        font-family: Roboto;
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: Roboto;
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: format('ttf');
+      }
+
+      @font-face {
+        font-family: Ubuntu Mono;
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+        src: url(./test/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
+      }
+    `,
+    options: {
+      fontTypes: {
+        'Noto Serif': `serif`,
+        Roboto: `sans-serif`,
+      } as const,
+    },
+    expectedWarnings: [
+      `Duplicate declaration`,
+      `Missing src`,
+      `Missing font-family`,
+      `No url`,
+      `Missing font type mapping: Ubuntu Mono`,
+    ],
   },
 ])(`postcssFontpie: $name`, async ({ css, options, expectedWarnings }) => {
   const result = await runPostcss(css, options)

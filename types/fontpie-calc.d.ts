@@ -34,6 +34,6 @@ declare module 'fontpie-calc' {
     fontWeight: number
   }
 
-  const fontpieCalc: (fontFile: string, options?: Options) => Output
+  const fontpieCalc: (fontFile: string, options?: Options) => Output | null
   export default fontpieCalc
 }

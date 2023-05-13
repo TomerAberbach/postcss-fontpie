@@ -159,7 +159,7 @@ const parseFontFamily = (
   }
 
   if (!Object.prototype.hasOwnProperty.call(fontTypes, family)) {
-    familyDecl.warn(result, `Family not in font type mapping: ${family}`)
+    familyDecl.warn(result, `Missing font type mapping: ${family}`)
     return null
   }
 
@@ -183,18 +183,24 @@ const generateFallbackFontFaceRule = (
   fontFaceDecls: FontFaceDecls,
   { filename, family, type, style, weight }: FontFaceValues,
 ): AtRule => {
+  const calcResult = fontpieCalc(filename, {
+    name: family,
+    fallback: type,
+    style,
+    weight,
+  })
+  if (!calcResult) {
+    // eslint-disable-next-line typescript/no-throw-literal
+    throw fontFaceRule.error(`fontpie error`)
+  }
+
   const {
     fallbackFont,
     ascentOverride,
     descentOverride,
     lineGapOverride,
     sizeAdjust,
-  } = fontpieCalc(filename, {
-    name: family,
-    fallback: type,
-    style,
-    weight,
-  })
+  } = calcResult
 
   return new AtRule({
     name: `font-face`,
