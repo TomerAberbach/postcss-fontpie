@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`postcssFontpie 1`] = `
+"@font-face {
+    font-family: 'Kantumruy Pro Fallback';
+    font-style: normal;
+    font-weight: 500;
+    src: local(Arial);
+    ascent-override: 84.41%;
+    descent-override: 23.85%;
+    line-gap-override: 0.00%;
+    size-adjust: 108.99%;
+}
+
+  @font-face {
+    font-family: 'Kantumruy Pro';
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    src: url(./test/fixtures/KantumruyPro-Medium.ttf);
+  }
+
+  @font-face {
+    font-family: 'Kantumruy Pro Fallback';
+    font-style: normal;
+    font-weight: 600;
+    src: local(Arial Bold);
+    ascent-override: 90.02%;
+    descent-override: 25.44%;
+    line-gap-override: 0.00%;
+    size-adjust: 102.20%;
+}
+
+  @font-face {
+    font-family: 'Kantumruy Pro';
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+    src: url(./test/fixtures/KantumruyPro-SemiBold.woff2) format('woff2');
+  }
+
+  @font-face {
+    font-family: 'Kantumruy Pro Fallback';
+    font-style: italic;
+    font-weight: 600;
+    src: local(Arial Bold Italic);
+    ascent-override: 90.10%;
+    descent-override: 25.46%;
+    line-gap-override: 0.00%;
+    size-adjust: 102.11%;
+}
+
+  @font-face {
+    font-family: 'Kantumruy Pro';
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+    src: url(./test/fixtures/KantumruyPro-SemiBoldItalic.woff) format('woff');
+  }
+
+  @font-face {
+    font-family: 'Kantumruy Pro Fallback';
+    font-style: italic;
+    font-weight: 700;
+    src: local(Arial Bold Italic);
+    ascent-override: 88.97%;
+    descent-override: 25.14%;
+    line-gap-override: 0.00%;
+    size-adjust: 103.41%;
+}
+
+  @font-face {
+    font-family: 'Kantumruy Pro';
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+    src: url(./test/fixtures/KantumruyPro-BoldItalic.ttf) format('ttf');
+  }"
+`;

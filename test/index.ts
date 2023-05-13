@@ -14,10 +14,47 @@
  * limitations under the License.
  */
 
-import { expectTypeOf } from 'tomer'
+import 'tomer'
+import postcss from 'postcss'
 import postcssFontpie from '../src/index.js'
 
-test(`postcssFontpie works`, () => {
-  expectTypeOf(postcssFontpie).toEqualTypeOf<() => string>()
-  expect(postcssFontpie()).toBe(`Hello World!`)
+test.each([
+  `@font-face {
+    font-family: 'Kantumruy Pro';
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+    src: url(./test/fixtures/KantumruyPro-Medium.ttf);
+  }
+
+  @font-face {
+    font-family: 'Kantumruy Pro';
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+    src: url(./test/fixtures/KantumruyPro-SemiBold.woff2) format('woff2');
+  }
+
+  @font-face {
+    font-family: 'Kantumruy Pro';
+    font-weight: 600;
+    font-style: italic;
+    font-display: swap;
+    src: url(./test/fixtures/KantumruyPro-SemiBoldItalic.woff) format('woff');
+  }
+
+  @font-face {
+    font-family: 'Kantumruy Pro';
+    font-weight: 700;
+    font-style: italic;
+    font-display: swap;
+    src: url(./test/fixtures/KantumruyPro-BoldItalic.ttf) format('ttf');
+  }`,
+])(`postcssFontpie`, async css => {
+  const processedCss = await runPostcss(css)
+
+  expect(processedCss).toMatchSnapshot()
 })
+
+const runPostcss = async (input: string): Promise<string> =>
+  (await postcss([postcssFontpie()]).process(input, { from: undefined })).css
