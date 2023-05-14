@@ -74,8 +74,7 @@ const outputPath = `output.css`
 const outputCss = (
   await postcss([
     postcssFontpie({
-      // A mapping from `font-family` to its font type (`sans-serif`, `serif`,
-      // or `mono`).
+      // A mapping from `font-family` to its font type (`sans-serif`, `serif`, or `mono`).
       fontTypes: {
         'Noto Serif': `serif`,
         Roboto: `sans-serif`,
