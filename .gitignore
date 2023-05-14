@@ -1,5 +1,4 @@
 /node_modules/
 /coverage/
 /dist/
-dist.css
 *.tsbuildinfo
