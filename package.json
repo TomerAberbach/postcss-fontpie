@@ -6,7 +6,7 @@
     "email": "tomeraberbach@gmail.com",
     "url": "https://tomeraberba.ch"
   },
-  "description": "A PostCSS plugin optimizing font loading layout shifts using fontpie!",
+  "description": "A PostCSS plugin for optimizing font loading layout shifts using fontpie!",
   "keywords": [
     "css",
     "postcss",

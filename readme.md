@@ -12,7 +12,7 @@
 </div>
 
 <div align="center">
-  A <a href="https://github.com/postcss/postcss">PostCSS</a> plugin optimizing font loading layout shifts using <a href="https://github.com/pixel-point/fontpie"><code>fontpie</code></a>!
+  A <a href="https://github.com/postcss/postcss">PostCSS</a> plugin for optimizing font loading layout shifts using <a href="https://github.com/pixel-point/fontpie"><code>fontpie</code></a>!
 </div>
 
 ## Features
