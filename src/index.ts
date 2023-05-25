@@ -16,9 +16,9 @@
 
 import { AtRule, Declaration, type PluginCreator, type Result } from 'postcss'
 import fontpieCalc from 'fontpie-calc'
-import parser from 'postcss-values-parser'
-import type { Func, Node } from 'postcss-values-parser'
-import { fromCssString, toCssString } from './css-string.js'
+import { toCssString } from './css-string.js'
+import { urlValue } from './url-value.js'
+import { fontFamilyNameValue } from './font-family-name-value.js'
 
 const plugin: PluginCreator<Options> = options => {
   if (!options) {
@@ -132,17 +132,13 @@ const parseFontFilename = (
   { srcUrlToFilename = filename => filename }: Options,
   result: Result,
 ): string | null => {
-  const urlNode = parser
-    .parse(srcDecl.value)
-    .nodes.find(
-      (node): node is Func => node.type === `func` && node.name === `url`,
-    )
-  if (!urlNode) {
+  const url = urlValue(srcDecl.value)
+  if (!url) {
     srcDecl.warn(result, `No url`)
     return null
   }
 
-  return srcUrlToFilename(urlNode.nodes.map(stringifyWithoutQuotes).join(``))
+  return srcUrlToFilename(url)
 }
 
 const parseFontFamily = (
@@ -150,8 +146,8 @@ const parseFontFamily = (
   { fontTypes }: Options,
   result: Result,
 ): Pick<FontFaceValues, `family` | `type`> | null => {
-  const family = stringifyWithoutQuotes(parser.parse(familyDecl.value))
-  if (isFallbackFontFamily(family)) {
+  const family = fontFamilyNameValue(familyDecl.value)
+  if (!family || isFallbackFontFamily(family)) {
     return null
   }
 
@@ -161,18 +157,6 @@ const parseFontFamily = (
   }
 
   return { family, type: fontTypes[family]! }
-}
-
-const stringifyWithoutQuotes = (node: Node): string => {
-  const string = parser.nodeToString(node)
-
-  if (
-    [`'`, `"`].some(quote => string.startsWith(quote) && string.endsWith(quote))
-  ) {
-    return fromCssString(string)
-  }
-
-  return string
 }
 
 const generateFallbackFontFaceRule = (
