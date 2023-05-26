@@ -14,20 +14,9 @@
  * limitations under the License.
  */
 
-import {
-  addSlashes,
-  getEscapedJsonUnsafe,
-  getUnescapedAny,
-  removeSlashes,
-} from 'slashes'
+import { addSlashes, getEscapedJsonUnsafe } from 'slashes'
 
 export const toCssString = (string: string): string =>
   `'${addSlashes(string, {
     getEscaped: c => (c === `'` ? `\\'` : getEscapedJsonUnsafe(c)),
   })}'`
-
-export const fromCssString = (string: string): string =>
-  removeSlashes(string.slice(1, -1), {
-    getUnescaped: (sequence, code) =>
-      sequence === `\\'` ? `'` : getUnescapedAny(sequence, code),
-  })

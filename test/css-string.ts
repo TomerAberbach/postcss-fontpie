@@ -14,16 +14,7 @@
  * limitations under the License.
  */
 
-import { fromCssString, toCssString } from '../src/css-string.js'
-
-test.each([
-  { cssString: `'a string'`, string: `a string` },
-  { cssString: `'a \\n \\' string'`, string: `a \n ' string` },
-  { cssString: `"a string"`, string: `a string` },
-  { cssString: `"a \\n \\" string"`, string: `a \n " string` },
-])(`fromCssString: $cssString -> $string`, ({ cssString, string }) => {
-  expect(fromCssString(cssString)).toBe(string)
-})
+import { toCssString } from '../src/css-string.js'
 
 test.each([
   { string: `a string`, cssString: `'a string'` },

@@ -41,6 +41,7 @@ const fontTypes: Options[`fontTypes`] = {
   'Noto Serif': `serif`,
   Roboto: `sans-serif`,
   'Ubuntu Mono': `mono`,
+  'Ubuntu Mono Bold': `mono`,
 }
 
 test.each([
@@ -60,7 +61,7 @@ test.each([
         font-weight: 400;
         font-style: normal;
         font-display: swap;
-        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+        src: url("./test/fonts/roboto/Roboto-Regular.ttf") format('ttf');
       }
 
       @font-face {
@@ -68,7 +69,7 @@ test.each([
         font-weight: 700;
         font-style: normal;
         font-display: swap;
-        src: url(./test/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
+        src: url("./test/fonts/ubuntu-mono/UbuntuMono-Bold.ttf" url-modifier) format('ttf');
       }
     `,
     options: { fontTypes },
@@ -90,7 +91,7 @@ test.each([
         font-weight: 400;
         font-style: normal;
         font-display: swap;
-        src: url(/roboto/Roboto-Regular.ttf) format('ttf');
+        src: url("/roboto/Roboto-Regular.ttf") format('ttf');
       }
 
       @font-face {
@@ -98,13 +99,59 @@ test.each([
         font-weight: 700;
         font-style: normal;
         font-display: swap;
-        src: url(/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
+        src: url("/ubuntu-mono/UbuntuMono-Bold.ttf" url-modifier) format('ttf');
       }
     `,
     options: {
       fontTypes,
       srcUrlToFilename: (url: string) => join(`./test/fonts`, url),
     },
+    expectedWarnings: [],
+  },
+  {
+    name: `font family names`,
+    css: `
+      @font-face {
+        font-family: 'Noto Serif';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: Roboto;
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: Ubuntu Mono;
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+        src: url(./test/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: Ubuntu/* a comment */Mono  Bold;
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+        src: url(./test/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
+      }
+    `,
+    options: { fontTypes },
     expectedWarnings: [],
   },
   {
@@ -154,6 +201,14 @@ test.each([
         font-weight: 400;
         font-style: normal;
         font-display: swap;
+        src: something;
+      }
+
+      @font-face {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
         src: format('ttf');
       }
 
@@ -163,6 +218,54 @@ test.each([
         font-style: normal;
         font-display: swap;
         src: url(./test/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: ;
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: '';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: #serif;
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: Noto 'Serif';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: Noto not-a-thing(--serif);
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Roboto' "Roboto";
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
       }
     `,
     options: {
@@ -176,7 +279,14 @@ test.each([
       `Missing src`,
       `Missing font-family`,
       `No url`,
+      `No url`,
       `Missing font type mapping: Ubuntu Mono`,
+      `Bad font-family`,
+      `Bad font-family`,
+      `Bad font-family`,
+      `Bad font-family`,
+      `Bad font-family`,
+      `Bad font-family`,
     ],
   },
 ])(`postcssFontpie: $name`, async ({ css, options, expectedWarnings }) => {
