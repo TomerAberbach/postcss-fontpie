@@ -16,34 +16,32 @@
 
 import { TokenType, tokenize } from '@csstools/css-tokenizer'
 
-export const fontFamilyNameValue = (string: string): string | undefined => {
+const IGNORED_TOKEN_TYPES: ReadonlySet<TokenType> = new Set([
+  TokenType.Comment,
+  TokenType.Whitespace,
+  TokenType.EOF,
+])
+
+export const parseFontFamilyNameValue = (string: string): string | null => {
   const tokens = tokenize({ css: string }).filter(
-    x =>
-      x[0] !== TokenType.Comment &&
-      x[0] !== TokenType.Whitespace &&
-      x[0] !== TokenType.EOF,
+    ([tokenType]) => !IGNORED_TOKEN_TYPES.has(tokenType),
   )
 
   if (tokens.length === 0) {
-    return undefined
+    return null
   }
 
-  if (tokens.length === 1 && tokens[0]) {
-    if (tokens[0][0] === TokenType.Ident) {
-      return tokens[0][4].value
-    }
-    if (tokens[0][0] === TokenType.String) {
-      return tokens[0][4].value
-    }
+  if (tokens.length === 1 && tokens[0] && tokens[0][0] === TokenType.String) {
+    return tokens[0][4].value
   }
 
-  const identTokens = []
+  const identifiers = []
   for (const token of tokens) {
     if (token[0] !== TokenType.Ident) {
-      return undefined
+      return null
     }
-    identTokens.push(token)
+    identifiers.push(token[4].value)
   }
 
-  return identTokens.map(token => token[4].value).join(` `)
+  return identifiers.join(` `)
 }

@@ -21,29 +21,24 @@ import {
   parseListOfComponentValues,
 } from '@csstools/css-parser-algorithms'
 
-export const urlValue = (string: string): string | undefined => {
+export const parseUrlValue = (string: string): string | null => {
   const componentValues = parseListOfComponentValues(tokenize({ css: string }))
-  return componentValues
-    .map(componentValue => {
-      if (
-        isTokenNode(componentValue) &&
-        componentValue.value[0] === TokenType.URL
-      ) {
-        return componentValue.value[4].value
-      }
+  for (const componentValue of componentValues) {
+    if (
+      isTokenNode(componentValue) &&
+      componentValue.value[0] === TokenType.URL
+    ) {
+      return componentValue.value[4].value
+    }
 
-      if (
-        isFunctionNode(componentValue) &&
-        componentValue.getName() === `url`
-      ) {
-        for (const token of componentValue.tokens()) {
-          if (token[0] === TokenType.String) {
-            return token[4].value
-          }
+    if (isFunctionNode(componentValue) && componentValue.getName() === `url`) {
+      for (const token of componentValue.tokens()) {
+        if (token[0] === TokenType.String) {
+          return token[4].value
         }
       }
+    }
+  }
 
-      return undefined
-    })
-    .find(Boolean)
+  return null
 }

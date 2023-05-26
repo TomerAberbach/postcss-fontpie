@@ -174,14 +174,6 @@ test.each([
       }
 
       @font-face {
-        font-family: 'Roboto' "Roboto";
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
-      }
-
-      @font-face {
         font-family: Roboto;
         font-family: Roboto;
         font-weight: 400;
@@ -259,6 +251,14 @@ test.each([
         font-display: swap;
         src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
       }
+
+      @font-face {
+        font-family: 'Roboto' "Roboto";
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+      }
     `,
     options: {
       fontTypes: {
@@ -272,6 +272,12 @@ test.each([
       `Missing font-family`,
       `No url`,
       `Missing font type mapping: Ubuntu Mono`,
+      `Bad font-family`,
+      `Bad font-family`,
+      `Bad font-family`,
+      `Bad font-family`,
+      `Bad font-family`,
+      `Bad font-family`,
     ],
   },
 ])(`postcssFontpie: $name`, async ({ css, options, expectedWarnings }) => {

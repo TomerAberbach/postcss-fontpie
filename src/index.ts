@@ -17,8 +17,8 @@
 import { AtRule, Declaration, type PluginCreator, type Result } from 'postcss'
 import fontpieCalc from 'fontpie-calc'
 import { toCssString } from './css-string.js'
-import { urlValue } from './url-value.js'
-import { fontFamilyNameValue } from './font-family-name-value.js'
+import { parseUrlValue } from './parse-url-value.js'
+import { parseFontFamilyNameValue } from './parse-font-family-name-value.js'
 
 const plugin: PluginCreator<Options> = options => {
   if (!options) {
@@ -132,7 +132,7 @@ const parseFontFilename = (
   { srcUrlToFilename = filename => filename }: Options,
   result: Result,
 ): string | null => {
-  const url = urlValue(srcDecl.value)
+  const url = parseUrlValue(srcDecl.value)
   if (!url) {
     srcDecl.warn(result, `No url`)
     return null
@@ -146,8 +146,13 @@ const parseFontFamily = (
   { fontTypes }: Options,
   result: Result,
 ): Pick<FontFaceValues, `family` | `type`> | null => {
-  const family = fontFamilyNameValue(familyDecl.value)
-  if (!family || isFallbackFontFamily(family)) {
+  const family = parseFontFamilyNameValue(familyDecl.value)
+  if (!family) {
+    familyDecl.warn(result, `Bad font-family`)
+    return null
+  }
+
+  if (isFallbackFontFamily(family)) {
     return null
   }
 
