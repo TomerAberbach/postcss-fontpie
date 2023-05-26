@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 
-import { TokenType, tokenize } from '@csstools/css-tokenizer'
+import { type CSSToken, TokenType, tokenize } from '@csstools/css-tokenizer'
+
+export const parseFontFamilyNameValue = (string: string): string | null => {
+  const tokens = tokenize({ css: string }).filter(
+    ([tokenType]) => !IGNORED_TOKEN_TYPES.has(tokenType),
+  )
+  return (
+    parseFontFamilyNameString(tokens) ?? parseFontFamilyNameIdentifiers(tokens)
+  )
+}
 
 const IGNORED_TOKEN_TYPES: ReadonlySet<TokenType> = new Set([
   TokenType.Comment,
@@ -22,17 +31,18 @@ const IGNORED_TOKEN_TYPES: ReadonlySet<TokenType> = new Set([
   TokenType.EOF,
 ])
 
-export const parseFontFamilyNameValue = (string: string): string | null => {
-  const tokens = tokenize({ css: string }).filter(
-    ([tokenType]) => !IGNORED_TOKEN_TYPES.has(tokenType),
-  )
-
-  if (tokens.length === 0) {
+const parseFontFamilyNameString = (tokens: CSSToken[]): string | null => {
+  if (tokens.length !== 1) {
     return null
   }
 
-  if (tokens.length === 1 && tokens[0]![0] === TokenType.String) {
-    return tokens[0][4].value
+  const token = tokens[0]!
+  return token[0] === TokenType.String ? token[4].value : null
+}
+
+const parseFontFamilyNameIdentifiers = (tokens: CSSToken[]): string | null => {
+  if (tokens.length === 0) {
+    return null
   }
 
   const identifiers = []
@@ -40,8 +50,8 @@ export const parseFontFamilyNameValue = (string: string): string | null => {
     if (token[0] !== TokenType.Ident) {
       return null
     }
+
     identifiers.push(token[4].value)
   }
-
   return identifiers.join(` `)
 }

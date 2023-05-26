@@ -16,27 +16,37 @@
 
 import { TokenType, tokenize } from '@csstools/css-tokenizer'
 import {
+  type ComponentValue,
   isFunctionNode,
   isTokenNode,
   parseListOfComponentValues,
 } from '@csstools/css-parser-algorithms'
 
-export const parseUrlValue = (string: string): string | null => {
-  const componentValues = parseListOfComponentValues(tokenize({ css: string }))
-  for (const componentValue of componentValues) {
-    if (
-      isTokenNode(componentValue) &&
-      componentValue.value[0] === TokenType.URL
-    ) {
-      return componentValue.value[4].value
-    }
+export const parseUrlValue = (string: string): string | null =>
+  parseListOfComponentValues(tokenize({ css: string }))
+    .map(
+      componentValue =>
+        parseUrlToken(componentValue) ?? parseUrlFunction(componentValue),
+    )
+    .find(Boolean) ?? null
 
-    if (isFunctionNode(componentValue) && componentValue.getName() === `url`) {
-      for (const token of componentValue.tokens()) {
-        if (token[0] === TokenType.String) {
-          return token[4].value
-        }
-      }
+const parseUrlToken = (componentValue: ComponentValue): string | null => {
+  if (!isTokenNode(componentValue)) {
+    return null
+  }
+
+  const token = componentValue.value
+  return token[0] === TokenType.URL ? token[4].value : null
+}
+
+const parseUrlFunction = (componentValue: ComponentValue): string | null => {
+  if (!isFunctionNode(componentValue) || componentValue.getName() !== `url`) {
+    return null
+  }
+
+  for (const token of componentValue.tokens()) {
+    if (token[0] === TokenType.String) {
+      return token[4].value
     }
   }
 
