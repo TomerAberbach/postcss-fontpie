@@ -31,7 +31,7 @@ export const parseFontFamilyNameValue = (string: string): string | null => {
     return null
   }
 
-  if (tokens.length === 1 && tokens[0] && tokens[0][0] === TokenType.String) {
+  if (tokens.length === 1 && tokens[0]![0] === TokenType.String) {
     return tokens[0][4].value
   }
 
