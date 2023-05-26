@@ -201,6 +201,14 @@ test.each([
         font-weight: 400;
         font-style: normal;
         font-display: swap;
+        src: something;
+      }
+
+      @font-face {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
         src: format('ttf');
       }
 
@@ -270,6 +278,7 @@ test.each([
       `Duplicate declaration`,
       `Missing src`,
       `Missing font-family`,
+      `No url`,
       `No url`,
       `Missing font type mapping: Ubuntu Mono`,
       `Bad font-family`,

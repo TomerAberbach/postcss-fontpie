@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { TokenType, tokenize } from '@csstools/css-tokenizer'
+import { type TokenString, TokenType, tokenize } from '@csstools/css-tokenizer'
 import {
   type ComponentValue,
   isFunctionNode,
@@ -36,6 +36,7 @@ const parseUrlToken = (componentValue: ComponentValue): string | null => {
   }
 
   const token = componentValue.value
+  console.log(token)
   return token[0] === TokenType.URL ? token[4].value : null
 }
 
@@ -44,11 +45,8 @@ const parseUrlFunction = (componentValue: ComponentValue): string | null => {
     return null
   }
 
-  for (const token of componentValue.tokens()) {
-    if (token[0] === TokenType.String) {
-      return token[4].value
-    }
-  }
-
-  return null
+  const token = componentValue
+    .tokens()
+    .find((token): token is TokenString => token[0] === TokenType.String)!
+  return token[4].value
 }
