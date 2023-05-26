@@ -36,7 +36,6 @@ const parseUrlToken = (componentValue: ComponentValue): string | null => {
   }
 
   const token = componentValue.value
-  console.log(token)
   return token[0] === TokenType.URL ? token[4].value : null
 }
 
