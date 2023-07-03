@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { type CSSToken, TokenType, tokenize } from '@csstools/css-tokenizer'
 
 export const parseFontFamilyNameValue = (string: string): string | null => {

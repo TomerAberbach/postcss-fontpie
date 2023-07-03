@@ -13,14 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { type TokenString, TokenType, tokenize } from '@csstools/css-tokenizer'
 import {
   type ComponentValue,
   isFunctionNode,
   isTokenNode,
   parseListOfComponentValues,
 } from '@csstools/css-parser-algorithms'
+import { type TokenString, TokenType, tokenize } from '@csstools/css-tokenizer'
 
 export const parseUrlValue = (string: string): string | null =>
   parseListOfComponentValues(tokenize({ css: string }))

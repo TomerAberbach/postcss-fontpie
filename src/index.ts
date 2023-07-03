@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { AtRule, Declaration, type PluginCreator, type Result } from 'postcss'
 import fontpieCalc from 'fontpie-calc'
+import { AtRule, Declaration, type PluginCreator, type Result } from 'postcss'
 import { toCssString } from './css-string.js'
-import { parseUrlValue } from './parse-url-value.js'
 import { parseFontFamilyNameValue } from './parse-font-family-name-value.js'
+import { parseUrlValue } from './parse-url-value.js'
 
 const plugin: PluginCreator<Options> = options => {
   if (!options) {

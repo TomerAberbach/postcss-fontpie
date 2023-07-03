@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import 'tomer'
 import { join } from 'path'
 import postcss from 'postcss'
 import type { LazyResult } from 'postcss'
+import 'tomer'
 import postcssFontpie from '../src/index.js'
 import type { Options } from '../src/index.js'
 

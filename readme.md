@@ -62,8 +62,8 @@ $ npm i postcss-fontpie
 **index.js:**
 
 ```js
-import { join } from 'path'
 import fs from 'fs/promises'
+import { join } from 'path'
 import postcss from 'postcss'
 import postcssFontpie from 'postcss-fontpie'
 
