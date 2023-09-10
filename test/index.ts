@@ -24,6 +24,16 @@ test(`postcssFontpie throws for no options`, () => {
   expect(postcssFontpie).toThrow()
 })
 
+test(`postcssFontpie throws for both srcUrlToFilename and resolveFilename options`, () => {
+  expect(() =>
+    postcssFontpie({
+      fontTypes: {},
+      srcUrlToFilename: () => `hello`,
+      resolveFilename: () => `world`,
+    }),
+  ).toThrow()
+})
+
 test(`postcssFontpie throws for fontpie error`, async () => {
   await expect(
     runPostcss(
