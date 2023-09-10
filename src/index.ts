@@ -20,10 +20,7 @@ import { parseFontFamilyNameValue } from './parse-font-family-name-value.js'
 import { parseUrlValue } from './parse-url-value.js'
 
 const plugin: PluginCreator<Options> = options => {
-  if (!options) {
-    throw new Error(`Options are required`)
-  }
-
+  const normalizedOptions = normalizeOptions(options)
   return {
     postcssPlugin: `postcss-fontpie`,
     AtRule: {
@@ -35,7 +32,7 @@ const plugin: PluginCreator<Options> = options => {
 
         const fontFaceValues = parseFontFaceValues(
           fontFaceDecls,
-          options,
+          normalizedOptions,
           result,
         )
         if (!fontFaceValues) {
@@ -54,6 +51,28 @@ const plugin: PluginCreator<Options> = options => {
   }
 }
 plugin.postcss = true
+
+const normalizeOptions = (
+  options?: Options,
+): Omit<Options, `srcUrlToFilename`> => {
+  if (!options) {
+    throw new Error(`Options are required`)
+  }
+
+  if (!options.srcUrlToFilename) {
+    return options
+  }
+
+  if (options.resolveFilename) {
+    throw new Error(`Cannot specify both srcUrlToFilename and resolveFilename`)
+  }
+
+  const { srcUrlToFilename, ...otherOptions } = options
+  return {
+    ...otherOptions,
+    resolveFilename: ({ src }) => srcUrlToFilename(src),
+  }
+}
 
 const getFontFaceDecls = (
   fontFaceRule: AtRule,
@@ -113,22 +132,26 @@ const parseFontFaceValues = (
     return null
   }
 
-  const filename = parseFontFilename(fontFaceDecls.src, options, result)
+  const style = fontFaceDecls.style?.value
+  const weight = fontFaceDecls.weight?.value
+  const fontFace = { ...familyAndType, style, weight }
+  const filename = parseFontFilename(
+    fontFaceDecls.src,
+    fontFace,
+    options,
+    result,
+  )
   if (filename === null) {
     return null
   }
 
-  return {
-    filename,
-    ...familyAndType,
-    style: fontFaceDecls.style?.value,
-    weight: fontFaceDecls.weight?.value,
-  }
+  return { filename, ...fontFace }
 }
 
 const parseFontFilename = (
   srcDecl: Declaration,
-  { srcUrlToFilename = filename => filename }: Options,
+  fontFace: Omit<FontFace, `src`>,
+  { resolveFilename = ({ src }) => src }: Options,
   result: Result,
 ): string | null => {
   const url = parseUrlValue(srcDecl.value)
@@ -137,7 +160,7 @@ const parseFontFilename = (
     return null
   }
 
-  return srcUrlToFilename(url)
+  return resolveFilename({ src: url, ...fontFace })
 }
 
 const parseFontFamily = (
@@ -245,12 +268,39 @@ export type Options = {
   readonly fontTypes: Readonly<Record<string, FontType>>
 
   /**
+   * An optional function that transforms a `@font-face` rule to a file system
+   * path to the font file.
+   *
+   * The path is resolved relative to `process.cwd()`.
+   */
+  readonly resolveFilename?: (fontFace: Readonly<FontFace>) => string
+
+  /**
    * An optional function that transforms a `@font-face` rule's `src` `url`
    * value to a file system path to the font file.
    *
    * The path is resolved relative to `process.cwd()`.
+   *
+   * @deprecated Use {@link Options.resolveFilename} instead.
    */
   readonly srcUrlToFilename?: (url: string) => string
+}
+
+export type FontFace = {
+  /** The `@font-face` rule's `src` `url` value. */
+  src: string
+
+  /** The `@font-face` rule's `font-family` value. */
+  family: string
+
+  /** The type of the {@link FontFace.family}. */
+  type: FontType
+
+  /** The `@font-face` rule's `font-style` value if one was specified. */
+  style?: string
+
+  /** The `@font-face` rule's `font-weight` value if one was specified. */
+  weight?: string
 }
 
 export type FontType = `sans-serif` | `serif` | `mono`

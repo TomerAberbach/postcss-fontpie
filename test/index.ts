@@ -18,7 +18,7 @@ import postcss from 'postcss'
 import type { LazyResult } from 'postcss'
 import 'tomer'
 import postcssFontpie from '../src/index.js'
-import type { Options } from '../src/index.js'
+import type { FontFace, Options } from '../src/index.js'
 
 test(`postcssFontpie throws for no options`, () => {
   expect(postcssFontpie).toThrow()
@@ -45,7 +45,7 @@ const fontTypes: Options[`fontTypes`] = {
 
 test.each([
   {
-    name: `default srcUrlToFilename`,
+    name: `default resolveFilename`,
     css: `
       @font-face {
         font-family: 'Noto Serif';
@@ -104,6 +104,32 @@ test.each([
     options: {
       fontTypes,
       srcUrlToFilename: (url: string) => join(`./test/fonts`, url),
+    },
+    expectedWarnings: [],
+  },
+  {
+    name: `custom resolveFilename`,
+    css: `
+      @font-face {
+        font-family: 'Noto Serif';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+    `,
+    options: {
+      fontTypes,
+      resolveFilename: (fontFace: FontFace) => {
+        expect(fontFace).toStrictEqual({
+          src: `/noto-serif/NotoSerif-Italic.ttf`,
+          family: `Noto Serif`,
+          type: `serif`,
+          style: `italic`,
+          weight: `400`,
+        })
+        return join(`./test/fonts`, fontFace.src)
+      },
     },
     expectedWarnings: [],
   },
