@@ -1,5 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`postcssFontpie: custom resolveFilename 1`] = `
+"@font-face {
+        font-family: 'Noto Serif Fallback';
+        font-style: italic;
+        font-weight: 400;
+        src: local(Times New Roman Italic);
+        ascent-override: 91.94%;
+        descent-override: 25.20%;
+        line-gap-override: 0.00%;
+        size-adjust: 116.25%;
+}
+@font-face {
+        font-family: 'Noto Serif';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+    "
+`;
+
 exports[`postcssFontpie: custom srcUrlToFilename 1`] = `
 "@font-face {
         font-family: 'Noto Serif Fallback';
@@ -60,7 +81,7 @@ exports[`postcssFontpie: custom srcUrlToFilename 1`] = `
     "
 `;
 
-exports[`postcssFontpie: default srcUrlToFilename 1`] = `
+exports[`postcssFontpie: default resolveFilename 1`] = `
 "@font-face {
         font-family: 'Noto Serif Fallback';
         font-style: italic;
