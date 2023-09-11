@@ -81,8 +81,9 @@ const outputCss = (
         'Ubuntu Mono': `mono`,
       },
 
-      // An optional function that transforms a url to a path to the font file.
-      srcUrlToFilename: url => join(`./path/to/fonts`, url),
+      // An optional function that transforms a font face to a path to the font
+      // file.
+      resolveFilename: fontFace => join(`./path/to/fonts`, fontFace.src),
     }),
   ]).process(css, { from: inputPath, to: outputPath })
 ).css
