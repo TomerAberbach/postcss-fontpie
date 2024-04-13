@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import fontpieCalc from 'fontpie-calc'
-import { AtRule, Declaration, type PluginCreator, type Result } from 'postcss'
+import { AtRule, Declaration } from 'postcss'
+import type { PluginCreator, Result } from 'postcss'
 import { toCssString } from './css-string.js'
 import { parseFontFamilyNameValue } from './parse-font-family-name-value.js'
 import { parseUrlValue } from './parse-url-value.js'
@@ -78,9 +80,9 @@ const getFontFaceDecls = (
   fontFaceRule: AtRule,
   result: Result,
 ): FontFaceDecls | null => {
-  const declsByProp: Map<string, Declaration> = new Map()
+  const declsByProp = new Map<string, Declaration>()
 
-  for (const node of fontFaceRule.nodes) {
+  for (const node of fontFaceRule.nodes ?? []) {
     const decl = node as Declaration
     const { prop } = decl
     if (!FONT_FACE_DECL_PROPS.has(prop)) {

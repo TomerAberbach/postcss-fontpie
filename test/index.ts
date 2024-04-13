@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { join } from 'path'
+import { join } from 'node:path'
 import postcss from 'postcss'
 import type { LazyResult } from 'postcss'
 import 'tomer'

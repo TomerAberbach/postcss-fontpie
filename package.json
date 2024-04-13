@@ -49,8 +49,8 @@
   },
   "prettier": "tomer/prettier",
   "dependencies": {
-    "@csstools/css-parser-algorithms": "^2.2.0",
-    "@csstools/css-tokenizer": "^2.1.1",
+    "@csstools/css-parser-algorithms": "^2.6.1",
+    "@csstools/css-tokenizer": "^2.2.4",
     "fontkit": "^2.0.2",
     "fontpie-calc": "^0.2.0",
     "slashes": "^3.0.12"
@@ -59,12 +59,12 @@
     "postcss": "^8.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.2",
-    "eslint": "^8.44.0",
-    "jest": "^29.5.0",
-    "postcss": "^8.4.24",
-    "prettier": "^2.8.8",
-    "tomer": "^2.0.6",
-    "typescript": "^5.1.6"
+    "@types/jest": "^29.5.12",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "postcss": "^8.4.38",
+    "prettier": "^3.2.5",
+    "tomer": "^3.1.2",
+    "typescript": "^5.4.5"
   }
 }
