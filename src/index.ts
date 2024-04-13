@@ -82,7 +82,7 @@ const getFontFaceDecls = (
 ): FontFaceDecls | null => {
   const declsByProp = new Map<string, Declaration>()
 
-  for (const node of fontFaceRule.nodes ?? []) {
+  for (const node of fontFaceRule.nodes!) {
     const decl = node as Declaration
     const { prop } = decl
     if (!FONT_FACE_DECL_PROPS.has(prop)) {
