@@ -3,7 +3,7 @@
   "version": "2.0.1",
   "author": {
     "name": "Tomer Aberbach",
-    "email": "tomeraberbach@gmail.com",
+    "email": "tomer@aberba.ch",
     "url": "https://tomeraberba.ch"
   },
   "description": "A PostCSS plugin for optimizing font loading layout shifts using fontpie!",
