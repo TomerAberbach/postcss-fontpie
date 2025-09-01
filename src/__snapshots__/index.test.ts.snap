@@ -1,0 +1,376 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`postcssFontpie: 'custom resolveFilename' 1`] = `
+"@font-face {
+        font-family: 'Noto Serif Fallback';
+        font-style: italic;
+        font-weight: 400;
+        src: local(Times New Roman Italic);
+        ascent-override: 91.94%;
+        descent-override: 25.20%;
+        line-gap-override: 0.00%;
+        size-adjust: 116.25%;
+}
+@font-face {
+        font-family: 'Noto Serif';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+    "
+`;
+
+exports[`postcssFontpie: 'custom srcUrlToFilename' 1`] = `
+"@font-face {
+        font-family: 'Noto Serif Fallback';
+        font-style: italic;
+        font-weight: 400;
+        src: local(Times New Roman Italic);
+        ascent-override: 91.94%;
+        descent-override: 25.20%;
+        line-gap-override: 0.00%;
+        size-adjust: 116.25%;
+}
+
+      @font-face {
+        font-family: 'Noto Serif';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Roboto Fallback';
+        font-style: normal;
+        font-weight: 400;
+        src: local(Arial);
+        ascent-override: 92.49%;
+        descent-override: 24.34%;
+        line-gap-override: 0.00%;
+        size-adjust: 100.30%;
+}
+
+      @font-face {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url("/roboto/Roboto-Regular.ttf") format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Ubuntu Mono Fallback';
+        font-style: normal;
+        font-weight: 700;
+        src: local(Courier New Bold);
+        ascent-override: 99.62%;
+        descent-override: 20.40%;
+        line-gap-override: 0.00%;
+        size-adjust: 83.32%;
+}
+
+      @font-face {
+        font-family: Ubuntu Mono;
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+        src: url("/ubuntu-mono/UbuntuMono-Bold.ttf" url-modifier) format('ttf');
+      }
+    "
+`;
+
+exports[`postcssFontpie: 'default resolveFilename' 1`] = `
+"@font-face {
+        font-family: 'Noto Serif Fallback';
+        font-style: italic;
+        font-weight: 400;
+        src: local(Times New Roman Italic);
+        ascent-override: 91.94%;
+        descent-override: 25.20%;
+        line-gap-override: 0.00%;
+        size-adjust: 116.25%;
+}
+
+      @font-face {
+        font-family: 'Noto Serif';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Roboto Fallback';
+        font-style: normal;
+        font-weight: 400;
+        src: local(Arial);
+        ascent-override: 92.49%;
+        descent-override: 24.34%;
+        line-gap-override: 0.00%;
+        size-adjust: 100.30%;
+}
+
+      @font-face {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url("./src/fonts/roboto/Roboto-Regular.ttf") format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Ubuntu Mono Fallback';
+        font-style: normal;
+        font-weight: 700;
+        src: local(Courier New Bold);
+        ascent-override: 99.62%;
+        descent-override: 20.40%;
+        line-gap-override: 0.00%;
+        size-adjust: 83.32%;
+}
+
+      @font-face {
+        font-family: Ubuntu Mono;
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+        src: url("./src/fonts/ubuntu-mono/UbuntuMono-Bold.ttf" url-modifier) format('ttf');
+      }
+    "
+`;
+
+exports[`postcssFontpie: 'font family names' 1`] = `
+"@font-face {
+        font-family: 'Noto Serif Fallback';
+        font-style: italic;
+        font-weight: 400;
+        src: local(Times New Roman Italic);
+        ascent-override: 91.94%;
+        descent-override: 25.20%;
+        line-gap-override: 0.00%;
+        size-adjust: 116.25%;
+}
+
+      @font-face {
+        font-family: 'Noto Serif';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Roboto Fallback';
+        font-style: normal;
+        font-weight: 400;
+        src: local(Arial);
+        ascent-override: 92.49%;
+        descent-override: 24.34%;
+        line-gap-override: 0.00%;
+        size-adjust: 100.30%;
+}
+
+      @font-face {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./src/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Roboto Fallback';
+        font-style: normal;
+        font-weight: 400;
+        src: local(Arial);
+        ascent-override: 92.49%;
+        descent-override: 24.34%;
+        line-gap-override: 0.00%;
+        size-adjust: 100.30%;
+}
+
+      @font-face {
+        font-family: Roboto;
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./src/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Ubuntu Mono Fallback';
+        font-style: normal;
+        font-weight: 700;
+        src: local(Courier New Bold);
+        ascent-override: 99.62%;
+        descent-override: 20.40%;
+        line-gap-override: 0.00%;
+        size-adjust: 83.32%;
+}
+
+      @font-face {
+        font-family: Ubuntu Mono;
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+        src: url(./src/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Ubuntu Mono Bold Fallback';
+        font-style: normal;
+        font-weight: 700;
+        src: local(Courier New Bold);
+        ascent-override: 99.62%;
+        descent-override: 20.40%;
+        line-gap-override: 0.00%;
+        size-adjust: 83.32%;
+}
+
+      @font-face {
+        font-family: Ubuntu/* a comment */Mono  Bold;
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+        src: url(./src/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
+      }
+    "
+`;
+
+exports[`postcssFontpie: 'warnings' 1`] = `
+"@font-face {
+        font-family: 'Noto Serif Fallback';
+        font-style: italic;
+        font-weight: 400;
+        src: local(Times New Roman Italic);
+        ascent-override: 91.94%;
+        descent-override: 25.20%;
+        line-gap-override: 0.00%;
+        size-adjust: 116.25%;
+}
+
+      @font-face {
+        font-family: 'Noto Serif';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Roboto Fallback';
+        font-style: normal;
+        font-weight: 400;
+        src: local(Arial);
+        ascent-override: 92.49%;
+        descent-override: 24.34%;
+        line-gap-override: 0.00%;
+        size-adjust: 100.30%;
+}
+
+      @font-face {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./src/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: Roboto;
+        font-family: Roboto;
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./src/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: Roboto;
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+      }
+
+      @font-face {
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./src/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: something;
+      }
+
+      @font-face {
+        font-family: 'Roboto';
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: format('ttf');
+      }
+
+      @font-face {
+        font-family: Ubuntu Mono;
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+        src: url(./src/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: ;
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: '';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: #serif;
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: Noto 'Serif';
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: Noto not-a-thing(--serif);
+        font-weight: 400;
+        font-style: italic;
+        font-display: swap;
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+      }
+
+      @font-face {
+        font-family: 'Roboto' "Roboto";
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+        src: url(./src/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+      }
+    "
+`;

@@ -1,19 +1,3 @@
-/**
- * Copyright 2023 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 import fontpieCalc from 'fontpie-calc'
 import { AtRule, Declaration } from 'postcss'
 import type { PluginCreator, Result } from 'postcss'
@@ -180,7 +164,7 @@ const parseFontFamily = (
     return null
   }
 
-  if (!Object.prototype.hasOwnProperty.call(fontTypes, family)) {
+  if (!Object.hasOwn(fontTypes, family)) {
     familyDecl.warn(result, `Missing font type mapping: ${family}`)
     return null
   }
@@ -200,7 +184,6 @@ const generateFallbackFontFaceRule = (
     weight,
   })
   if (!calcResult) {
-    // eslint-disable-next-line typescript/no-throw-literal
     throw fontFaceRule.error(`fontpie error`)
   }
 

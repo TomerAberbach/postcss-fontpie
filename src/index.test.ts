@@ -1,24 +1,9 @@
-/**
- * Copyright 2023 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 import { join } from 'node:path'
 import postcss from 'postcss'
 import type { LazyResult } from 'postcss'
-import 'tomer'
-import postcssFontpie from '../src/index.js'
-import type { FontFace, Options } from '../src/index.js'
+import { expect, test } from 'vitest'
+import postcssFontpie from './index.ts'
+import type { FontFace, Options } from './index.ts'
 
 test(`postcssFontpie throws for no options`, () => {
   expect(postcssFontpie).toThrow()
@@ -62,7 +47,7 @@ test.each([
         font-weight: 400;
         font-style: italic;
         font-display: swap;
-        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
       }
 
       @font-face {
@@ -70,7 +55,7 @@ test.each([
         font-weight: 400;
         font-style: normal;
         font-display: swap;
-        src: url("./test/fonts/roboto/Roboto-Regular.ttf") format('ttf');
+        src: url("./src/fonts/roboto/Roboto-Regular.ttf") format('ttf');
       }
 
       @font-face {
@@ -78,7 +63,7 @@ test.each([
         font-weight: 700;
         font-style: normal;
         font-display: swap;
-        src: url("./test/fonts/ubuntu-mono/UbuntuMono-Bold.ttf" url-modifier) format('ttf');
+        src: url("./src/fonts/ubuntu-mono/UbuntuMono-Bold.ttf" url-modifier) format('ttf');
       }
     `,
     options: { fontTypes },
@@ -113,7 +98,7 @@ test.each([
     `,
     options: {
       fontTypes,
-      srcUrlToFilename: (url: string) => join(`./test/fonts`, url),
+      srcUrlToFilename: (url: string) => join(`./src/fonts`, url),
     },
     expectedWarnings: [],
   },
@@ -138,7 +123,7 @@ test.each([
           style: `italic`,
           weight: `400`,
         })
-        return join(`./test/fonts`, fontFace.src)
+        return join(`./src/fonts`, fontFace.src)
       },
     },
     expectedWarnings: [],
@@ -151,7 +136,7 @@ test.each([
         font-weight: 400;
         font-style: italic;
         font-display: swap;
-        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
       }
 
       @font-face {
@@ -159,7 +144,7 @@ test.each([
         font-weight: 400;
         font-style: normal;
         font-display: swap;
-        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+        src: url(./src/fonts/roboto/Roboto-Regular.ttf) format('ttf');
       }
 
       @font-face {
@@ -167,7 +152,7 @@ test.each([
         font-weight: 400;
         font-style: normal;
         font-display: swap;
-        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+        src: url(./src/fonts/roboto/Roboto-Regular.ttf) format('ttf');
       }
 
       @font-face {
@@ -175,7 +160,7 @@ test.each([
         font-weight: 700;
         font-style: normal;
         font-display: swap;
-        src: url(./test/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
+        src: url(./src/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
       }
 
       @font-face {
@@ -183,7 +168,7 @@ test.each([
         font-weight: 700;
         font-style: normal;
         font-display: swap;
-        src: url(./test/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
+        src: url(./src/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
       }
     `,
     options: { fontTypes },
@@ -197,7 +182,7 @@ test.each([
         font-weight: 400;
         font-style: italic;
         font-display: swap;
-        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
       }
 
       @font-face {
@@ -205,7 +190,7 @@ test.each([
         font-weight: 400;
         font-style: normal;
         font-display: swap;
-        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+        src: url(./src/fonts/roboto/Roboto-Regular.ttf) format('ttf');
       }
 
       @font-face {
@@ -214,7 +199,7 @@ test.each([
         font-weight: 400;
         font-style: normal;
         font-display: swap;
-        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+        src: url(./src/fonts/roboto/Roboto-Regular.ttf) format('ttf');
       }
 
       @font-face {
@@ -228,7 +213,7 @@ test.each([
         font-weight: 400;
         font-style: normal;
         font-display: swap;
-        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+        src: url(./src/fonts/roboto/Roboto-Regular.ttf) format('ttf');
       }
 
       @font-face {
@@ -252,7 +237,7 @@ test.each([
         font-weight: 700;
         font-style: normal;
         font-display: swap;
-        src: url(./test/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
+        src: url(./src/fonts/ubuntu-mono/UbuntuMono-Bold.ttf) format('ttf');
       }
 
       @font-face {
@@ -260,7 +245,7 @@ test.each([
         font-weight: 400;
         font-style: italic;
         font-display: swap;
-        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
       }
 
       @font-face {
@@ -268,7 +253,7 @@ test.each([
         font-weight: 400;
         font-style: italic;
         font-display: swap;
-        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
       }
 
       @font-face {
@@ -276,7 +261,7 @@ test.each([
         font-weight: 400;
         font-style: italic;
         font-display: swap;
-        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
       }
 
       @font-face {
@@ -284,7 +269,7 @@ test.each([
         font-weight: 400;
         font-style: italic;
         font-display: swap;
-        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
       }
 
       @font-face {
@@ -292,7 +277,7 @@ test.each([
         font-weight: 400;
         font-style: italic;
         font-display: swap;
-        src: url(./test/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
+        src: url(./src/fonts/noto-serif/NotoSerif-Italic.ttf) format('ttf');
       }
 
       @font-face {
@@ -300,7 +285,7 @@ test.each([
         font-weight: 400;
         font-style: normal;
         font-display: swap;
-        src: url(./test/fonts/roboto/Roboto-Regular.ttf) format('ttf');
+        src: url(./src/fonts/roboto/Roboto-Regular.ttf) format('ttf');
       }
     `,
     options: {
